@@ -22,8 +22,8 @@
   <script>
     var isProcessing = false;
     
-    // ⚠️ ඔයාගේ Google Web App ලින්ක් එක මෙතනට දාන්න ⚠️
-    var googleScriptUrl = "https://script.google.com/macros/library/d/1sqIZgi1vBUXVtCudnV0e-5WKJyYEeu9VCGk3s_fGRS3KYg_5L1XoNh-G/3"; 
+    // ඔයාගේ Google Web App ලින්ක් එක
+    var googleScriptUrl = "https://script.google.com/a/macros/sdf.lk/s/AKfycbzXtBUc9TO28jdfBhpdoviEyVfwDWJGgOCQFiCoDIb5Cr2IsSjYaIYxfeNTegImEEHw/exec"; 
 
     function onScanSuccess(decodedText, decodedResult) {
       if(isProcessing) return;
@@ -33,21 +33,22 @@
       resDiv.className = "processing";
       resDiv.innerText = "Processing " + decodedText + "...";
 
-      fetch(googleScriptUrl + "?empNo=" + encodeURIComponent(decodedText), {
-        mode: 'no-cors'
-      })
-      .then(response => {
-           resDiv.innerText = "Scanned EMP No: " + decodedText;
+      // අලුත් Fetch Code එක
+      var url = googleScriptUrl + "?empNo=" + encodeURIComponent(decodedText);
+      
+      fetch(url, { mode: 'no-cors' })
+      .then(function() {
+           resDiv.innerText = "✅ " + decodedText + " ස්කෑන් වුණා!";
            resDiv.className = "success";
            
            setTimeout(function() {
              isProcessing = false;
              resDiv.innerText = "Ready for next scan...";
              resDiv.className = "";
-           }, 3000);
+           }, 2000); // තත්පර 2කින් ඊළඟ එකට ලෑස්ති වෙනවා
       })
-      .catch(err => {
-          resDiv.innerText = "Error connecting!";
+      .catch(function(err) {
+          resDiv.innerText = "Connection Error!";
           resDiv.className = "error";
           isProcessing = false;
       });
